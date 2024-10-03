@@ -11,12 +11,13 @@
 <form action="index.php" method="post">
     <label for="mensaje">Introduce el mensaje cifrado:</label><br>
     <textarea name="mensaje" id="mensaje" rows="4" cols="50" required></textarea><br><br>
-    <input type="submit" value="Descifrar">
+    <input type="submit" name="submit_x2aX" value="X2 a X">
+    <input type="submit" name="submit_x2aX1" value="X2 a X1">
 </form>
 
 <?php
-// Si se envía el formulario, procesamos el mensaje
-if (isset($_POST['mensaje'])) {
+// Si se envía el formulario para X2 a X
+if (isset($_POST['mensaje']) && isset($_POST['submit_x2aX'])) {
     $mensaje = trim($_POST['mensaje']);
     
     // Función que verifica si un carácter es vocal
@@ -50,7 +51,7 @@ if (isset($_POST['mensaje'])) {
         return $resultado;
     }
 
-    // Función que descifra el mensaje
+    // Función que descifra el mensaje (X'' a X)
     function descifrar($mensaje) {
         $n = strlen($mensaje);
         $x_prim = array_fill(0, $n, '');  // Creamos un arreglo vacío de longitud $n
@@ -75,12 +76,45 @@ if (isset($_POST['mensaje'])) {
         return invertirNoVocales($x_prim_str);
     }
 
-    // Llamamos a la función de descifrado
+    // Llamamos a la función de descifrado completa
     $mensaje_descifrado = descifrar($mensaje);
 
     // Mostramos el resultado
     echo "<p><strong>Mensaje cifrado:</strong> $mensaje</p>";
     echo "<p><strong>Mensaje descifrado:</strong> $mensaje_descifrado</p>";
+}
+
+// Si se envía el formulario para X2 a X1
+if (isset($_POST['mensaje']) && isset($_POST['submit_x2aX1'])) {
+    $mensaje = trim($_POST['mensaje']);
+
+    // Función que reconstruye X' a partir de X''
+    function obtener_X1($mensaje) {
+        $n = strlen($mensaje);
+        $x_prim = array_fill(0, $n, '');  // Creamos un arreglo vacío de longitud $n
+        $izquierda = 0;
+        $derecha = $n - 1;
+
+        // Construimos X' a partir de X''
+        for ($i = 0; $i < $n; $i++) {
+            if ($i % 2 == 0) {
+                $x_prim[$izquierda] = $mensaje[$i];
+                $izquierda++;
+            } else {
+                $x_prim[$derecha] = $mensaje[$i];
+                $derecha--;
+            }
+        }
+        
+        return implode('', $x_prim);  // Convertimos el arreglo a una cadena
+    }
+
+    // Llamamos a la función para obtener X'
+    $mensaje_x1 = obtener_X1($mensaje);
+
+    // Mostramos el resultado
+    echo "<p><strong>Mensaje cifrado:</strong> $mensaje</p>";
+    echo "<p><strong>Mensaje X1 (X' obtenido):</strong> $mensaje_x1</p>";
 }
 ?>
 
