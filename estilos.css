@@ -59,3 +59,9 @@ input[type="submit"]:hover {
     width: 300px;
     text-align: center;
 }
+
+#mensaje {
+    width: 280px;  /* Ancho fijo */
+    height: 150px; /* Altura fija */
+    resize: none;  /* Desactiva el redimensionado */
+}
